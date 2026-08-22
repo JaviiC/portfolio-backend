@@ -5,18 +5,18 @@ import java.util.Set;
 
 public class Vehiculo {
 
-    private TipoVehiculo tipo;
+    private VehicleType tipo;
     private Motor motor;
-    private Transmision transmision;
+    private Transmission transmission;
     private String colorInterior;
     private String colorExterior;
-    private Set<Paquete> paquetes;
-    private Set<Caracteristica> caracteristicas;
+    private Set<Packet> packets;
+    private Set<Feature> features;
 
     public Vehiculo(){
         this("Negro", "Blanco y Azul");
-        paquetes = new HashSet<>();
-        caracteristicas = new HashSet<>();
+        packets = new HashSet<>();
+        features = new HashSet<>();
     }
 
     public Vehiculo(String colorInterior, String colorExterior){
@@ -24,11 +24,11 @@ public class Vehiculo {
         this.colorExterior = colorExterior;
     }
 
-    public TipoVehiculo getTipo() {
+    public VehicleType getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoVehiculo tipo) {
+    public void setTipo(VehicleType tipo) {
         this.tipo = tipo;
     }
 
@@ -40,12 +40,12 @@ public class Vehiculo {
         this.motor = motor;
     }
 
-    public Transmision getTransmision() {
-        return transmision;
+    public Transmission getTransmision() {
+        return transmission;
     }
 
-    public void setTransmision(Transmision transmision) {
-        this.transmision = transmision;
+    public void setTransmision(Transmission transmission) {
+        this.transmission = transmission;
     }
 
     public String getColorInterior() {
@@ -64,20 +64,20 @@ public class Vehiculo {
         this.colorExterior = colorExterior;
     }
 
-    public Set<Paquete> getPaquetes() {
-        return paquetes;
+    public Set<Packet> getPaquetes() {
+        return packets;
     }
 
-    public Set<Caracteristica> getCaracteristicas() {
-        return caracteristicas;
+    public Set<Feature> getCaracteristicas() {
+        return features;
     }
 
-    public void aniadirPaquete(Paquete paquete){
-        this.paquetes.add(paquete);
+    public void aniadirPaquete(Packet packet){
+        this.packets.add(packet);
     }
 
-    public void aniadirCaracteristica(Caracteristica caracteristica){
-        this.caracteristicas.add(caracteristica);
+    public void aniadirCaracteristica(Feature feature){
+        this.features.add(feature);
     }
 
     @Override
@@ -85,11 +85,11 @@ public class Vehiculo {
         return "Vehiculo{" +
                 "tipo=" + tipo +
                 ", motor=" + motor +
-                ", transmision=" + transmision +
+                ", transmision=" + transmission +
                 ", colorInterior='" + colorInterior + '\'' +
                 ", colorExterior='" + colorExterior + '\'' +
-                ", paquetes=" + paquetes +
-                ", caracteristicas=" + caracteristicas +
+                ", paquetes=" + packets +
+                ", caracteristicas=" + features +
                 '}';
     }
 }

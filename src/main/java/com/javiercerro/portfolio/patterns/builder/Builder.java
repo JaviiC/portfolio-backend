@@ -2,12 +2,12 @@ package com.javiercerro.portfolio.patterns.builder;
 
 public interface Builder {
     void reset();
-    void setTipo(TipoVehiculo tipo);
+    void setTipo(VehicleType tipo);
     void fabricarMotor(Motor motor);
-    void gestionarTransmision(Transmision transmision);
+    void gestionarTransmision(Transmission transmission);
     void pintarInterior(String colorI);
     void pintarExterior(String colorE);
-    void aniadirPaquete(Paquete paquete);
-    void aniadirCaracteristica(Caracteristica caracteristica);
+    void aniadirPaquete(Packet packet);
+    void aniadirCaracteristica(Feature feature);
     Vehiculo fabricarVehiculo();
 }

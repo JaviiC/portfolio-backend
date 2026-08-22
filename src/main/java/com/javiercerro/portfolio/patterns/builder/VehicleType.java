@@ -1,6 +1,6 @@
 package com.javiercerro.portfolio.patterns.builder;
 
-public enum TipoVehiculo {
+public enum VehicleType {
     SUV,
     HATCHBACK,
     DEPORTIVO,

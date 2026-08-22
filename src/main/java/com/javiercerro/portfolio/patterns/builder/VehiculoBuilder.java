@@ -10,7 +10,7 @@ public class VehiculoBuilder implements Builder{
     }
 
     @Override
-    public void setTipo(TipoVehiculo tipo) {
+    public void setTipo(VehicleType tipo) {
         if(vehiculo.getTipo() == null)
             vehiculo.setTipo(tipo);
     }
@@ -21,9 +21,9 @@ public class VehiculoBuilder implements Builder{
     }
 
     @Override
-    public void gestionarTransmision(Transmision transmision) {
+    public void gestionarTransmision(Transmission transmission) {
         if(vehiculo.getTransmision() == null)
-            vehiculo.setTransmision(transmision);
+            vehiculo.setTransmision(transmission);
     }
 
     @Override
@@ -37,13 +37,13 @@ public class VehiculoBuilder implements Builder{
     }
 
     @Override
-    public void aniadirPaquete(Paquete paquete) {
-        vehiculo.aniadirPaquete(paquete);
+    public void aniadirPaquete(Packet packet) {
+        vehiculo.aniadirPaquete(packet);
     }
 
     @Override
-    public void aniadirCaracteristica(Caracteristica caracteristica) {
-        vehiculo.aniadirCaracteristica(caracteristica);
+    public void aniadirCaracteristica(Feature feature) {
+        vehiculo.aniadirCaracteristica(feature);
     }
 
     @Override

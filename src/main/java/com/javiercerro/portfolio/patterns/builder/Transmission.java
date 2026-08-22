@@ -1,6 +1,6 @@
 package com.javiercerro.portfolio.patterns.builder;
 
-public enum Transmision {
+public enum Transmission {
     AUTOMATICA,
     MANUAL,
     SEMI_AUTOMATICA

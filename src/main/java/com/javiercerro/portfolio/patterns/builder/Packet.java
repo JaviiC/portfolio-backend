@@ -1,6 +1,6 @@
 package com.javiercerro.portfolio.patterns.builder;
 
-public enum Paquete {
+public enum Packet {
     BASICO,
     PREMIUM,
     DEPORTIVO,

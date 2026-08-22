@@ -1,6 +1,6 @@
 package com.javiercerro.portfolio.patterns.builder;
 
-public enum Caracteristica {
+public enum Feature {
     ASIENTOS_CALEFACCION,
     TECHO_SOLAR,
     SISTEMA_NAVEGACION,
