@@ -2,7 +2,7 @@ package com.javiercerro.portfolio.patterns.builder;
 
 public class BuilderDirector {
 
-    public void fabricarVehiculoSuv(VehiculoBuilder builder){
+    public void fabricarVehiculoSuv(VehicleBuilder builder){
         builder.setTipo(VehicleType.SUV);
         builder.fabricarMotor(new Motor());
         builder.gestionarTransmision(Transmission.MANUAL);
@@ -12,19 +12,19 @@ public class BuilderDirector {
         builder.aniadirCaracteristica(Feature.TUBO_DE_ESCAPE_DOBLE);
     }
 
-    public void fabricarVehiculoHatchback(VehiculoBuilder builder){
+    public void fabricarVehiculoHatchback(VehicleBuilder builder){
         builder.setTipo(VehicleType.HATCHBACK);
         builder.fabricarMotor(new Motor());
         // TODO
     }
 
-    public void fabricarVehiculoDeportivo(VehiculoBuilder builder){
+    public void fabricarVehiculoDeportivo(VehicleBuilder builder){
         builder.setTipo(VehicleType.DEPORTIVO);
         builder.fabricarMotor(new Motor());
         // TODO
     }
 
-    public void fabricarVehiculoBerlina(VehiculoBuilder builder){
+    public void fabricarVehiculoBerlina(VehicleBuilder builder){
         builder.setTipo(VehicleType.BERLINA);
         builder.fabricarMotor(new Motor("berlina"));
         // TODO

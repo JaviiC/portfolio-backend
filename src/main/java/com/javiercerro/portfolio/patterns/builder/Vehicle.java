@@ -3,7 +3,7 @@ package com.javiercerro.portfolio.patterns.builder;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Vehiculo {
+public class Vehicle {
 
     private VehicleType tipo;
     private Motor motor;
@@ -13,13 +13,13 @@ public class Vehiculo {
     private Set<Packet> packets;
     private Set<Feature> features;
 
-    public Vehiculo(){
+    public Vehicle(){
         this("Negro", "Blanco y Azul");
         packets = new HashSet<>();
         features = new HashSet<>();
     }
 
-    public Vehiculo(String colorInterior, String colorExterior){
+    public Vehicle(String colorInterior, String colorExterior){
         this.colorInterior = colorInterior;
         this.colorExterior = colorExterior;
     }

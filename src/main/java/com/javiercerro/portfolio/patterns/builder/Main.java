@@ -5,11 +5,11 @@ public class Main {
     public static void main(String[] args) {
 
         BuilderDirector director = new BuilderDirector();
-        VehiculoBuilder builder = new VehiculoBuilder();
+        VehicleBuilder builder = new VehicleBuilder();
         director.fabricarVehiculoSuv(builder);
-        Vehiculo vehiculo = builder.fabricarVehiculo();
+        Vehicle vehicle = builder.fabricarVehiculo();
 
-        System.out.println("Vehículo fabricado -> " + vehiculo);
+        System.out.println("Vehículo fabricado -> " + vehicle);
 
 //        builder.reset();
 //        builder.fabricarVehiculo();

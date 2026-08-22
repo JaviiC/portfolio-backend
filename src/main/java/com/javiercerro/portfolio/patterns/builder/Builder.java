@@ -9,5 +9,5 @@ public interface Builder {
     void pintarExterior(String colorE);
     void aniadirPaquete(Packet packet);
     void aniadirCaracteristica(Feature feature);
-    Vehiculo fabricarVehiculo();
+    Vehicle fabricarVehiculo();
 }
