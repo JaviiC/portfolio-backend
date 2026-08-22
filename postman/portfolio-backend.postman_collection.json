@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Portfolio Backend - Javier del Cerro de Nava",
+    "description": "CRUD completo de la API bancaria (banking). migration y patterns son código real pero no se exponen ya como endpoints del portfolio.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" },
+    { "key": "accountId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Obtener token de invitado",
+      "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/demo-token" }
+    },
+    {
+      "name": "Banking - Listar cuentas",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/banking/accounts" }
+    },
+    {
+      "name": "Banking - Ver una cuenta",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/banking/accounts/{{accountId}}" }
+    },
+    {
+      "name": "Banking - Crear cuenta",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/banking/accounts",
+        "body": { "mode": "raw", "raw": "{\n  \"holderId\": \"12345678Z\",\n  \"accountType\": \"CHECKING\"\n}" }
+      }
+    },
+    {
+      "name": "Banking - Modificar cuenta",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/banking/accounts/{{accountId}}",
+        "body": { "mode": "raw", "raw": "{\n  \"holderId\": \"12345678Z\",\n  \"accountType\": \"SAVINGS\",\n  \"status\": \"ACTIVE\"\n}" }
+      }
+    },
+    {
+      "name": "Banking - Eliminar cuenta",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/banking/accounts/{{accountId}}"
+      }
+    },
+    {
+      "name": "Banking - Crear pago",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/banking/payments",
+        "body": { "mode": "raw", "raw": "{\n  \"accountId\": \"{{accountId}}\",\n  \"amount\": 150.0,\n  \"currency\": \"USD\"\n}" }
+      }
+    },
+    {
+      "name": "Banking - Ver contrato OpenAPI",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/banking/contract" }
+    }
+  ]
+}

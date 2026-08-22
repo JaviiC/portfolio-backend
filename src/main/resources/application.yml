@@ -1,0 +1,15 @@
+server:
+  # Render/Railway inyectan su propio puerto en la variable $PORT.
+  # En local, sin esa variable definida, sigue usando 8080 como hasta ahora.
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: portfolio-backend
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  api-docs:
+    path: /v3/api-docs

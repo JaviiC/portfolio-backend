@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Javier del Cerro de Nava — Software Developer · Backend Developer</title>
+<meta name="description" content="Portfolio de Javier del Cerro de Nava, desarrollador backend Java/Spring Boot, con un laboratorio interactivo que consume una API bancaria real.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1420; --bg-elevated:#161D2C; --bg-elevated-2:#1E2740;
+    --paper:#F3EFE6; --paper-line:#DBD4C1;
+    --ink:#E8E6DE; --ink-dim:#B7BCC9; --muted:#8891A3;
+    --accent:#F2A63D; --accent-ink:#241503; --accent-2:#4FC1B0; --info:#7FA8E0; --danger:#E0654F;
+    --border: rgba(232,230,222,0.12);
+    --radius:14px;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font-body); line-height:1.55;
+    padding-bottom:44px;
+  }
+  h1,h2,h3{font-family:var(--font-display); margin:0; letter-spacing:-0.01em;}
+  a{color:var(--accent);}
+  p{color:var(--ink-dim);}
+  code{font-family:var(--font-mono); font-size:0.92em;}
+  section{padding:88px 24px; max-width:1080px; margin:0 auto;}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:12.5px; text-transform:uppercase;
+    letter-spacing:0.14em; color:var(--accent-2); margin-bottom:14px; display:block;
+  }
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:14.5px;
+    padding:12px 22px; border-radius:999px; border:1px solid transparent;
+    cursor:pointer; display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+  }
+  .btn-primary{background:var(--accent); color:var(--accent-ink);}
+  .btn-primary:hover{background:#ffb955;}
+  .btn-ghost{background:transparent; color:var(--ink); border-color:var(--border);}
+  .btn-ghost:hover{border-color:var(--accent-2); color:var(--accent-2);}
+  button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-visible{
+    outline:2px solid var(--accent-2); outline-offset:2px;
+  }
+  .tag{
+    font-family:var(--font-mono); font-size:12px; padding:4px 10px; border-radius:999px;
+    border:1px solid var(--border); color:var(--ink-dim); white-space:nowrap;
+  }
+  .tag-accent{border-color:rgba(242,166,61,0.4); color:var(--accent); background:rgba(242,166,61,0.08);}
+
+  header.topbar{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(10px);
+    background:rgba(14,20,32,0.85); border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1080px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .logo{font-family:var(--font-mono); font-size:14px; color:var(--ink);}
+  .logo .blink{color:var(--accent-2); animation:blink 1.1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  nav.nav-links{display:flex; gap:20px; overflow-x:auto; scrollbar-width:none;}
+  nav.nav-links::-webkit-scrollbar{display:none;}
+  .nav-link{
+    font-size:13.5px; font-weight:500; color:var(--ink-dim); text-decoration:none;
+    white-space:nowrap; padding:4px 2px; border-bottom:2px solid transparent;
+  }
+  .nav-link.active, .nav-link:hover{color:var(--ink); border-bottom-color:var(--accent);}
+
+  .hero{padding-top:64px; padding-bottom:64px;}
+  .hero-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:center;}
+  .hero h1{font-size:clamp(32px,4.4vw,52px); line-height:1.05; margin:10px 0 16px;}
+  .hero p.lede{font-size:17px; max-width:46ch;}
+  .hero-ctas{display:flex; gap:12px; margin-top:28px; flex-wrap:wrap;}
+  .terminal{
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; box-shadow:0 30px 60px -30px rgba(0,0,0,0.6);
+  }
+  .terminal-bar{display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--bg-elevated-2); border-bottom:1px solid var(--border);}
+  .terminal-dot{width:10px; height:10px; border-radius:50%;}
+  .terminal-body{font-family:var(--font-mono); font-size:13px; padding:18px; min-height:220px; white-space:pre-wrap; word-break:break-word;}
+  .term-prompt{color:var(--accent-2);}
+  .term-cmd{color:var(--ink);}
+  .term-res{color:var(--muted); display:block; margin-top:10px;}
+  .terminal-caption{font-family:var(--font-mono); font-size:11.5px; color:var(--muted); margin-top:10px;}
+
+  .about p{font-size:17px; max-width:66ch; color:var(--ink-dim);}
+
+  .timeline{border-left:1px solid var(--border); padding-left:28px; display:flex; flex-direction:column; gap:36px;}
+  .timeline-item{position:relative;}
+  .timeline-item::before{
+    content:''; position:absolute; left:-33px; top:6px; width:9px; height:9px;
+    border-radius:50%; background:var(--accent-2); box-shadow:0 0 0 4px rgba(79,193,176,0.15);
+  }
+  .timeline-date{font-family:var(--font-mono); font-size:12.5px; color:var(--accent-2);}
+  .timeline-role{font-size:19px; font-weight:600; margin-top:4px; color:var(--ink);}
+  .timeline-org{color:var(--muted); font-size:14px; margin-bottom:10px;}
+  .timeline-desc{max-width:64ch; margin-bottom:12px;}
+  .timeline-tags{display:flex; gap:8px; flex-wrap:wrap;}
+
+  /* Estudios actuales — 42 Madrid */
+  .v42-card{
+    display:flex; align-items:center; gap:36px;
+    background:linear-gradient(135deg, var(--bg-elevated), var(--bg-elevated-2));
+    border:1px solid rgba(79,193,176,0.35); border-radius:var(--radius);
+    padding:40px; position:relative; overflow:hidden;
+  }
+  .v42-number{
+    font-family:var(--font-display); font-weight:700; font-size:130px; line-height:1;
+    color:var(--accent-2); flex-shrink:0; text-shadow:0 0 50px rgba(79,193,176,0.35);
+  }
+  .v42-content{flex:1;}
+  .v42-content h3{font-size:20px; margin-bottom:10px;}
+  .v42-content p{font-size:15px; max-width:60ch;}
+  .v42-badges{display:flex; gap:8px; flex-wrap:wrap; margin-top:18px;}
+  .uoc-card{
+    display:flex; align-items:center; gap:36px;
+    background:linear-gradient(135deg, var(--bg-elevated), var(--bg-elevated-2));
+    border:1px solid rgba(242,166,61,0.35); border-radius:var(--radius);
+    padding:40px; margin-bottom:20px; position:relative; overflow:hidden;
+  }
+  .uoc-shield{flex-shrink:0; filter:drop-shadow(0 0 18px rgba(242,166,61,0.25));}
+  @media (max-width:860px){
+    .v42-card{flex-direction:column; text-align:center; padding:32px;}
+    .v42-number{font-size:90px;}
+    .uoc-card{flex-direction:column; text-align:center; padding:32px;}
+  }
+
+  .project-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  .card{background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); padding:26px;}
+  .card h3{font-size:19px; margin-bottom:10px;}
+  .card p{font-size:14.5px;}
+  .card .tag-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+
+  .lab-intro{max-width:66ch;}
+  .lab-tabs{display:flex; gap:8px; margin:28px 0 24px; flex-wrap:wrap;}
+  .lab-tab{
+    font-family:var(--font-mono); font-size:13px; padding:9px 16px; border-radius:8px;
+    background:var(--bg-elevated); border:1px solid var(--border); color:var(--ink-dim); cursor:pointer;
+  }
+  .lab-tab.active{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+
+  .console-panel{background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); padding:26px;}
+  .field-row{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:18px;}
+  .field{display:flex; flex-direction:column; gap:6px; flex:1; min-width:220px;}
+  .field label{font-size:12.5px; color:var(--muted); font-family:var(--font-mono);}
+  .field input, .field select, .field textarea{
+    background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--ink);
+    padding:10px 12px; font-family:var(--font-mono); font-size:13px;
+  }
+  .field textarea{min-height:96px; resize:vertical;}
+  .method-badge{font-family:var(--font-mono); font-size:12px; font-weight:600; padding:4px 8px; border-radius:6px;}
+  .method-get{background:rgba(79,193,176,0.15); color:var(--accent-2);}
+  .method-post{background:rgba(242,166,61,0.15); color:var(--accent);}
+  .method-put{background:rgba(127,168,224,0.15); color:var(--info);}
+  .method-delete{background:rgba(224,101,79,0.15); color:var(--danger);}
+  #path-label{font-family:var(--font-mono); font-size:13px; color:var(--ink-dim);}
+  #auth-badge{font-family:var(--font-mono); font-size:11.5px; color:var(--danger); border:1px solid rgba(224,101,79,0.4); padding:3px 8px; border-radius:6px;}
+  .jwt-panel{margin:16px 0; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .jwt-block{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px;}
+  .jwt-block h4{font-family:var(--font-mono); font-size:11px; color:var(--muted); margin:0 0 6px; text-transform:uppercase; letter-spacing:0.08em;}
+  .jwt-block pre{margin:0; font-size:11.5px; white-space:pre-wrap; word-break:break-word;}
+  .console-meta{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px;}
+  .status-pill{font-family:var(--font-mono); font-size:12px; padding:4px 10px; border-radius:999px;}
+  .status-pill.ok{background:rgba(79,193,176,0.15); color:var(--accent-2);}
+  .status-pill.err{background:rgba(224,101,79,0.15); color:var(--danger);}
+  .mono-small{font-family:var(--font-mono); font-size:11.5px; color:var(--muted);}
+  .response-body{
+    background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:14px;
+    font-family:var(--font-mono); font-size:12.5px; max-height:320px; overflow:auto; white-space:pre-wrap; word-break:break-word;
+  }
+  .console-error{color:var(--danger); font-size:13.5px;}
+
+  .pattern-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .pattern-card{background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); padding:22px;}
+  .pattern-card h3{font-size:16px; margin-bottom:12px;}
+  .pattern-card p{font-size:13.5px; margin:12px 0;}
+  .pattern-card pre{
+    background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px;
+    font-family:var(--font-mono); font-size:11px; overflow-x:auto; margin:0; color:var(--ink-dim);
+  }
+  .flow-row{display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
+  .flow-box{
+    background:var(--bg); border:1px solid var(--border); border-radius:7px;
+    padding:7px 10px; font-family:var(--font-mono); font-size:10.5px; color:var(--ink-dim); white-space:nowrap;
+  }
+  .flow-box.active{border-color:var(--accent); color:var(--accent); background:rgba(242,166,61,0.1);}
+  .flow-box.dim{opacity:0.55;}
+  .flow-arrow{color:var(--muted); font-size:13px;}
+  .flow-stack{display:flex; flex-direction:column; gap:4px;}
+  .patterns-note{max-width:64ch; margin-bottom:26px; color:var(--muted); font-size:14px;}
+
+  .arch-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .arch-card{background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius); padding:22px; text-align:center;}
+  .arch-card h3{font-size:15px; margin-bottom:16px;}
+  .stack-box{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px; font-family:var(--font-mono); font-size:12px; color:var(--ink-dim);}
+  .stack-arrow{color:var(--muted); font-size:14px; padding:2px 0;}
+  .hex-diagram{position:relative; width:180px; height:180px; margin:0 auto 16px;}
+  .hex-outer, .hex-mid, .hex-core{position:absolute; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .hex-outer{inset:0; border:1px dashed var(--accent-2);}
+  .hex-mid{inset:32px; border:1px dashed var(--accent-2); background:rgba(79,193,176,0.06);}
+  .hex-core{inset:70px; background:var(--accent-2); color:var(--bg); font-family:var(--font-mono); font-size:10px; font-weight:600; text-align:center; padding:4px;}
+  .arch-note{font-size:13px; color:var(--muted); text-align:left; margin-top:10px;}
+
+  .tech-groups{display:flex; flex-direction:column; gap:24px;}
+  .tech-group h3{font-size:13px; font-family:var(--font-mono); color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; font-weight:500;}
+  .tech-tags{display:flex; gap:8px; flex-wrap:wrap;}
+
+  .contact-card{
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--radius);
+    padding:36px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+  }
+  .contact-links{display:flex; flex-direction:column; gap:8px; font-family:var(--font-mono); font-size:14px;}
+  .contact-links a{color:var(--ink); text-decoration:none;}
+  .contact-links a:hover{color:var(--accent);}
+  footer{text-align:center; padding:32px 24px 0; color:var(--muted); font-size:12.5px; font-family:var(--font-mono);}
+
+  .statusbar{
+    position:fixed; bottom:0; left:0; right:0; height:36px; z-index:60;
+    background:var(--bg-elevated-2); border-top:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 16px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-dim);
+    overflow:hidden;
+  }
+  .status-left, .status-right{display:flex; align-items:center; gap:14px; white-space:nowrap;}
+  .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .dot-off{background:var(--muted);}
+  .dot-live{background:var(--accent-2); box-shadow:0 0 0 3px rgba(79,193,176,0.2);}
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .project-grid, .pattern-grid{grid-template-columns:1fr;}
+    .arch-grid{grid-template-columns:1fr;}
+    .jwt-panel{grid-template-columns:1fr;}
+    section{padding:64px 18px;}
+    .status-right .status-clock{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .logo .blink{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">javier<span class="blink">_</span>@backend:~$</div>
+    <nav class="nav-links">
+      <a class="nav-link" href="#sobre-mi">sobre-mi</a>
+      <a class="nav-link" href="#experiencia">experiencia</a>
+      <a class="nav-link" href="#estudios">estudios</a>
+      <a class="nav-link" href="#laboratorio">laboratorio</a>
+      <a class="nav-link" href="#patrones">patrones</a>
+      <a class="nav-link" href="#proyectos">proyectos</a>
+      <a class="nav-link" href="#tecnologias">tecnologias</a>
+      <a class="nav-link" href="#contacto">contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero" id="inicio">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Software Developer · Backend Developer</span>
+        <h1>Javier del Cerro de Nava</h1>
+        <p class="lede">Construyo APIs Java que sobreviven a producción. La última vez, migrando microservicios bancarios de MuleSoft a Java nativo para Santander USA. Esta web no lo cuenta: lo demuestra.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#laboratorio">Entrar al laboratorio</a>
+          <a class="btn btn-ghost" href="mailto:jdelcerrodenava@gmail.com">Escríbeme</a>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot" style="background:#E0654F"></span>
+          <span class="terminal-dot" style="background:#F2A63D"></span>
+          <span class="terminal-dot" style="background:#4FC1B0"></span>
+        </div>
+        <div class="terminal-body">
+          <span class="term-prompt">$</span> <span class="term-cmd" id="term-cmd"></span>
+          <span class="term-res" id="term-res"></span>
+        </div>
+      </div>
+    </div>
+    <p class="terminal-caption">↑ así responde mi API. La versión de verdad, con la que puedes interactuar, está en el laboratorio.</p>
+  </section>
+
+  <section class="about" id="sobre-mi">
+    <span class="eyebrow">Sobre mí</span>
+    <h2 style="font-size:26px; margin-bottom:16px;">Aprendo rápido y me obsesiono con los detalles</h2>
+    <p>Después de un año construyendo software real —desde una aplicación de gestión de parking hasta la migración de APIs bancarias en producción— sigo prefiriendo entender bien un problema antes que escribir la primera línea de código. Valoro el compañerismo y el respeto en los equipos de trabajo, y busco la mayor calidad en cada cosa que hago. Preparo además la certificación Oracle OCP Java SE 17 Developer.</p>
+  </section>
+
+  <section id="experiencia">
+    <span class="eyebrow">Experiencia</span>
+    <h2 style="font-size:26px; margin-bottom:36px;">Dónde he construido esto</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">Sep 2025 — Abr 2026</div>
+        <div class="timeline-role">Junior Software Developer</div>
+        <div class="timeline-org">DELÓGICA (Santander USA) · Madrid</div>
+        <p class="timeline-desc">Migración de APIs para Banco Santander USA, de MuleSoft a Java nativo. Ciclo de vida completo de cada pieza: análisis del flujo original, desarrollo, despliegue en OpenShift y validación en entorno CERT. Coordinación continua con el equipo de Gobierno del banco, siguiendo lineamientos de arquitectura, seguridad y documentación.</p>
+        <div class="timeline-tags">
+          <span class="tag">Java</span><span class="tag">MuleSoft</span><span class="tag">OpenShift</span><span class="tag">OpenAPI</span>
+          <span class="tag">CI/CD</span><span class="tag">Clean Code</span><span class="tag">Daily meetings</span><span class="tag">Debug</span>
+          <span class="tag">IBM API Connect</span><span class="tag">Jira Tickets</span><span class="tag">SCRUM</span><span class="tag">Sonar + Fortify</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Mar 2025 — Jun 2025</div>
+        <div class="timeline-role">Desarrollador de Software en prácticas</div>
+        <div class="timeline-org">MÉTRICA CONSULTING SL · Madrid</div>
+        <p class="timeline-desc">Patrones de diseño, algoritmia y Clean Code bajo metodología SCRUM. Persistencia con JPA y pruebas unitarias sobre Spring Framework / Spring Boot. Entre los desarrollos, una aplicación de gestión de parking (control de plazas, entradas/salidas, tickets e historial de uso). Impartí clases de programación a alumnos de 1º de DAM.</p>
+        <div class="timeline-tags">
+          <span class="tag">Spring Boot</span><span class="tag">JPA</span><span class="tag">SCRUM</span><span class="tag">Postman</span>
+          <span class="tag">Design Patterns</span><span class="tag">Clean Code</span><span class="tag">SOLID</span><span class="tag">Algorithms</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2024</div>
+        <div class="timeline-role">Profesor particular de Java</div>
+        <div class="timeline-org">Clases particulares</div>
+        <p class="timeline-desc">En mi segundo curso de estudio, estuve ofreciendo clases particulares de Java a los alumnos de primero.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2023 — 2025</div>
+        <div class="timeline-role">Desarrollo de Aplicaciones Multiplataforma (DAM)</div>
+        <div class="timeline-org">IES Ciudad Escolar · Madrid</div>
+        <p class="timeline-desc">Ciclo Formativo de Grado Superior centrado en programación multiplataforma: bases de datos, desarrollo de interfaces, acceso a datos, programación de servicios y procesos, y desarrollo de aplicaciones web y móviles.</p>
+        <div class="timeline-tags">
+          <span class="tag">Java</span><span class="tag">Bases de datos</span><span class="tag">Desarrollo web</span><span class="tag">Multiplataforma</span>
+          <span class="tag">Sistemas Informáticos</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="estudios">
+    <span class="eyebrow">Estudios actuales</span>
+    <h2 style="font-size:26px; margin-bottom:28px;">Formándome sin pausa</h2>
+
+    <div class="uoc-card">
+      <svg class="uoc-shield" width="88" height="106" viewBox="0 0 100 120" role="img" aria-label="Escudo UOC">
+        <title>UOC</title>
+        <path d="M50 4 L94 20 V56 C94 90 74 108 50 116 C26 108 6 90 6 56 V20 Z" fill="none" stroke="var(--accent)" stroke-width="3.5"/>
+        <text x="50" y="66" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="22" fill="var(--accent)">UOC</text>
+      </svg>
+      <div class="v42-content">
+        <h3>Ingeniería Informática — especialidad Software</h3>
+        <p style="color:var(--muted); font-size:13px; margin-bottom:10px;">UOC · Universitat Oberta de Catalunya</p>
+        <p>Grado universitario cursado online, compaginado con el trabajo, con itinerario de especialización en ingeniería del software: diseño y arquitectura de sistemas, calidad y gestión de proyectos.</p>
+      </div>
+    </div>
+
+    <div class="v42-card">
+      <div class="v42-number">42</div>
+      <div class="v42-content">
+        <h3>Campus 42 Madrid</h3>
+        <p>En 42 Madrid no hay profesores ni clases magistrales: el aprendizaje es enteramente peer-to-peer, resolviendo proyectos reales junto a otros estudiantes, con evaluación entre compañeros y una progresión por niveles marcada por el propio ritmo de cada uno. El acceso es a través de "la Piscine", el proceso de selección intensivo característico del campus.</p>
+        <div class="v42-badges">
+          <span class="tag tag-accent">Peer-to-peer</span>
+          <span class="tag tag-accent">100% basado en proyectos</span>
+          <span class="tag tag-accent">Sin profesores</span>
+          <span class="tag tag-accent">Evaluación entre pares</span>
+          <span class="tag tag-accent">Selección: La Piscine</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="laboratorio">
+    <span class="eyebrow">Laboratorio</span>
+    <h2 style="font-size:26px; margin-bottom:10px;">No me creas, pruébalo</h2>
+    <p class="lab-intro">Esto habla directamente con mi API bancaria real: crea, consulta, modifica y elimina cuentas, con JWT de verdad y JSON de verdad. Sin WebSockets, sin trucos de frontend — las mismas herramientas que uso a diario: Postman, Swagger, JWT. Todo lo que ves aquí es el paquete <code>banking/</code> del backend; es lo único que este laboratorio consume.</p>
+
+    <div class="console-panel" id="lab-console" style="margin-top:24px;">
+      <div class="field-row">
+        <div class="field" style="flex:2;">
+          <label for="backend-url">URL del backend</label>
+          <input type="text" id="backend-url" value="http://localhost:8080" spellcheck="false">
+        </div>
+        <div>
+          <button class="btn btn-primary" id="btn-token" onclick="getToken()">Obtener token</button>
+        </div>
+      </div>
+      <p class="mono-small" id="token-status">Sin token todavía. Los endpoints marcados con 🔒 lo necesitan.</p>
+
+      <div class="jwt-panel" id="jwt-panel" hidden>
+        <div class="jwt-block"><h4>Header decodificado</h4><pre id="jwt-header"></pre></div>
+        <div class="jwt-block"><h4>Payload decodificado</h4><pre id="jwt-payload"></pre></div>
+      </div>
+
+      <div class="field-row" style="margin-top:22px;">
+        <div class="field">
+          <label for="endpoint-select">Endpoint</label>
+          <select id="endpoint-select" onchange="updateEndpointUI()">
+            <optgroup label="Cuentas (CRUD)">
+              <option value="banking-list">Listar cuentas</option>
+              <option value="banking-get">Ver una cuenta</option>
+              <option value="banking-create">Crear cuenta 🔒</option>
+              <option value="banking-update">Modificar cuenta 🔒</option>
+              <option value="banking-delete">Eliminar cuenta 🔒</option>
+            </optgroup>
+            <optgroup label="Otros">
+              <option value="banking-payment">Crear pago 🔒</option>
+              <option value="banking-contract">Ver contrato OpenAPI</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row" style="align-items:center;">
+        <span class="method-badge method-get" id="method-badge">GET</span>
+        <span id="path-label">/api/banking/accounts</span>
+        <span id="auth-badge" hidden>requiere JWT</span>
+      </div>
+
+      <div class="field" id="path-param-field" hidden>
+        <label id="path-param-label" for="path-param-value">accountId</label>
+        <input type="text" id="path-param-value" placeholder="p.ej. CTA-3F2A1B (lo devuelve &quot;Crear cuenta&quot;)" spellcheck="false">
+      </div>
+
+      <div class="field">
+        <label for="request-body">Cuerpo de la petición (editable)</label>
+        <textarea id="request-body" hidden spellcheck="false"></textarea>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="btn btn-primary" id="btn-send" onclick="sendRequest()">Enviar petición</button>
+      </div>
+
+      <div id="response-panel" style="margin-top:20px;"></div>
+    </div>
+  </section>
+
+  <section id="patrones">
+    <span class="eyebrow">Patrones y arquitecturas</span>
+    <h2 style="font-size:26px; margin-bottom:10px;">Lo que controlo, explicado</h2>
+    <p class="patterns-note">Esta sección es intencionadamente estática: no llama a ningún backend. El objetivo no es la interactividad, es que en diez segundos veas que entiendo cada patrón y cada arquitectura — con su diagrama, su explicación y su código real.</p>
+
+    <div class="lab-tabs">
+      <button class="lab-tab active" data-tab="pat-patrones">Patrones de diseño</button>
+      <button class="lab-tab" data-tab="pat-arquitecturas">Arquitecturas</button>
+    </div>
+
+    <div class="lab-panel" id="panel-pat-patrones">
+      <div class="pattern-grid">
+
+        <div class="pattern-card">
+          <h3>Factory</h3>
+          <div class="flow-row">
+            <div class="flow-box">Cliente</div><span class="flow-arrow">→</span>
+            <div class="flow-box active">Factory</div><span class="flow-arrow">⇢</span>
+            <div class="flow-stack"><div class="flow-box dim">Producto A</div><div class="flow-box dim">Producto B</div></div>
+          </div>
+          <p>El cliente pide un tipo de producto por nombre; nunca importa las clases concretas.</p>
+          <pre>public class NotificationFactory {
+  public static Notification create(String type) {
+    return switch (type.toUpperCase()) {
+      case "EMAIL" -> new EmailNotification();
+      case "SMS" -> new SmsNotification();
+    };
+  }
+}</pre>
+        </div>
+
+        <div class="pattern-card">
+          <h3>Singleton</h3>
+          <div class="flow-row">
+            <div class="flow-stack"><div class="flow-box dim">Llamada 1</div><div class="flow-box dim">Llamada 2</div><div class="flow-box dim">Llamada 3</div></div>
+            <span class="flow-arrow">⇢</span>
+            <div class="flow-box active">Instancia única</div>
+          </div>
+          <p>Constructor privado + instancia estática: todas las llamadas devuelven el mismo objeto.</p>
+          <pre>private static final AppConfigSingleton INSTANCE
+    = new AppConfigSingleton();
+
+public static AppConfigSingleton getInstance() {
+  return INSTANCE;
+}</pre>
+        </div>
+
+        <div class="pattern-card">
+          <h3>Observer</h3>
+          <div class="flow-row">
+            <div class="flow-box active">Sujeto</div><span class="flow-arrow">⇢</span>
+            <div class="flow-stack"><div class="flow-box dim">Observer A</div><div class="flow-box dim">Observer B</div></div>
+          </div>
+          <p>El sujeto avisa a todos sus observadores de un cambio, sin conocer su lógica interna.</p>
+          <pre>public List&lt;String&gt; updatePrice(double newPrice) {
+  this.price = newPrice;
+  for (PriceObserver o : observers) {
+    o.onPriceChanged(newPrice);
+    triggered.add(o.name());
+  }
+  return triggered;
+}</pre>
+        </div>
+
+        <div class="pattern-card">
+          <h3>Strategy</h3>
+          <div class="flow-row">
+            <div class="flow-box">Contexto</div><span class="flow-arrow">→</span>
+            <div class="flow-box dim">Estrategia A</div>
+            <div class="flow-box active">Estrategia B</div>
+            <div class="flow-box dim">Estrategia C</div>
+          </div>
+          <p>El algoritmo se elige en tiempo de ejecución, intercambiable sin tocar el contexto.</p>
+          <pre>public sealed interface DiscountStrategy
+    permits NoDiscountStrategy,
+            PercentageDiscountStrategy,
+            FixedDiscountStrategy {
+  double apply(double amount);
+}</pre>
+        </div>
+
+        <div class="pattern-card">
+          <h3>Command</h3>
+          <div class="flow-row">
+            <div class="flow-box">Invocador</div><span class="flow-arrow">→</span>
+            <div class="flow-box active">Comando</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Receptor</div>
+          </div>
+          <p>Cada acción se encapsula como un objeto ejecutable, con su propio historial auditable.</p>
+          <pre>public String run(Command command) {
+  String result = command.execute();
+  history.add(new HistoryEntry(
+      command.description(), result, now()));
+  return result;
+}</pre>
+        </div>
+
+        <div class="pattern-card">
+          <h3>State</h3>
+          <div class="flow-row">
+            <span class="flow-arrow">↻</span>
+            <div class="flow-box active">Rojo</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Verde</div><span class="flow-arrow">→</span>
+            <div class="flow-box">Amarillo</div>
+          </div>
+          <p>Cada estado decide cuál es el siguiente. Sin enjambres de if/else.</p>
+          <pre>public sealed interface TrafficLightState
+    permits RedState, YellowState, GreenState {
+  TrafficLightState next();
+  String label();
+}</pre>
+        </div>
+
+        <div class="pattern-card">
+          <h3>Builder</h3>
+          <div class="flow-row">
+            <div class="flow-box">Builder</div><span class="flow-arrow">→</span>
+            <div class="flow-box dim">título</div><span class="flow-arrow">→</span>
+            <div class="flow-box dim">cuerpo</div><span class="flow-arrow">⇢</span>
+            <div class="flow-box active">Producto</div>
+          </div>
+          <p>Construcción de un objeto complejo paso a paso, explícita y legible, sin un constructor de seis parámetros.</p>
+          <pre>new ReportBuilder()
+  .withTitle("Cierre mensual")
+  .withBody(resumen)
+  .withFooter(firma)
+  .build();</pre>
+        </div>
+
+        <div class="pattern-card">
+          <h3>Delegate</h3>
+          <div class="flow-row">
+            <div class="flow-box active">Api (contrato)</div><span class="flow-arrow">⇢</span>
+            <div class="flow-box">Delegate (lógica real)</div>
+          </div>
+          <p>El contrato OpenAPI queda desacoplado de la lógica de negocio real. Este es literalmente el que usa el laboratorio bancario de arriba.</p>
+          <pre>public class BankingController implements BankingApi {
+  private final BankingApiDelegate delegate;
+  public ResponseEntity&lt;AccountResponse&gt; openAccount(...) {
+    return delegate.openAccount(request);
+  }
+}</pre>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="lab-panel" id="panel-pat-arquitecturas" hidden>
+      <div class="arch-grid">
+        <div class="arch-card">
+          <h3>MVC</h3>
+          <div class="stack-box">Controller</div>
+          <div class="stack-arrow">↕</div>
+          <div class="stack-box">Model</div>
+          <div class="stack-arrow">↕</div>
+          <div class="stack-box">View</div>
+          <p class="arch-note">Así estructuré el TFG: Spring Boot exponiendo el modelo, Angular como vista.</p>
+        </div>
+        <div class="arch-card">
+          <h3>Capas (Layered)</h3>
+          <div class="stack-box">web · controller (implementa el contrato)</div>
+          <div class="stack-arrow">↓</div>
+          <div class="stack-box">delegate · lógica de negocio real</div>
+          <div class="stack-arrow">↓</div>
+          <div class="stack-box">domain + repository · entidades</div>
+          <p class="arch-note">Así está construido literalmente el paquete <code>banking/</code> de este laboratorio.</p>
+        </div>
+        <div class="arch-card">
+          <h3>Hexagonal</h3>
+          <div class="hex-diagram">
+            <div class="hex-outer"></div>
+            <div class="hex-mid"></div>
+            <div class="hex-core">Dominio</div>
+          </div>
+          <p class="arch-note">Núcleo puro en el centro; puertos alrededor; adaptadores (REST, JPA...) en el borde. Es la evolución natural del laboratorio si mañana necesitara cambiar de framework sin tocar el dominio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proyectos">
+    <span class="eyebrow">Proyectos</span>
+    <h2 style="font-size:26px; margin-bottom:28px;">Lo que he construido de principio a fin</h2>
+    <div class="project-grid">
+      <div class="card">
+        <h3>Laboratorio bancario interactivo</h3>
+        <p>CRUD completo sobre cuentas con un backend Spring Boot real: JWT de verdad, contrato OpenAPI + Delegate, y respuestas JSON reales para cada acción.</p>
+        <div class="tag-row"><span class="tag">Java</span><span class="tag">Spring Security</span><span class="tag">OpenAPI</span><span class="tag">Delegate</span></div>
+        <div style="margin-top:14px;"><a class="btn btn-ghost" style="padding:8px 16px; font-size:13px;" href="#laboratorio">Ver en el laboratorio →</a></div>
+      </div>
+      <div class="card">
+        <h3>TFG — Sistema de asignación de tareas docentes</h3>
+        <p>Backend en Spring Boot (Java) y frontend en Angular. Gestión de roles, asignaciones y notificaciones en tiempo real para entornos educativos.</p>
+        <div class="tag-row"><span class="tag">Spring Boot</span><span class="tag">Angular</span><span class="tag">MySQL</span><span class="tag">Git</span></div>
+        <div style="margin-top:14px;"><a class="btn btn-ghost" style="padding:8px 16px; font-size:13px;" href="https://github.com/JaviiC/Proyecto-TFG-Backend" target="_blank" rel="noopener">Ver en GitHub →</a></div>
+      </div>
+      <div class="card">
+        <h3>Push Swap</h3>
+        <p>Proyecto del common core de 42: ordenar una pila de enteros usando dos pilas y un conjunto mínimo de operaciones (push, swap, rotate...), optimizando el número total de movimientos. C puro, sin librerías externas.</p>
+        <div class="tag-row"><span class="tag">C</span><span class="tag">Algoritmia</span><span class="tag">42 Madrid</span></div>
+        <div style="margin-top:14px;"><a class="btn btn-ghost" style="padding:8px 16px; font-size:13px;" href="https://github.com/JaviiC/42-PushSwap" target="_blank" rel="noopener">Ver en GitHub →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tecnologias">
+    <span class="eyebrow">Tecnologías</span>
+    <h2 style="font-size:26px; margin-bottom:28px;">Con lo que trabajo</h2>
+    <div class="tech-groups">
+      <div class="tech-group">
+        <h3>Lenguajes</h3>
+        <div class="tech-tags"><span class="tag">Java</span><span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span></div>
+      </div>
+      <div class="tech-group">
+        <h3>Backend, APIs &amp; Cloud</h3>
+        <div class="tech-tags">
+          <span class="tag">Spring Boot</span><span class="tag">Spring Security</span><span class="tag">Java EE / Jakarta EE</span><span class="tag">JPA</span>
+          <span class="tag">OpenAPI</span><span class="tag">JSON</span><span class="tag">Postman</span><span class="tag">IBM API Connect</span>
+          <span class="tag">JWT</span><span class="tag">OAuth 2.0</span><span class="tag">OpenShift</span><span class="tag">Kubernetes</span>
+          <span class="tag">CI/CD</span><span class="tag">MySQL</span><span class="tag">Git</span>
+        </div>
+      </div>
+      <div class="tech-group">
+        <h3>Metodología &amp; Calidad</h3>
+        <div class="tech-tags"><span class="tag">SCRUM</span><span class="tag">Jira</span><span class="tag">Clean Code</span><span class="tag">Sonar + Fortify</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto">
+    <span class="eyebrow">Contacto</span>
+    <div class="contact-card">
+      <div>
+        <h2 style="font-size:22px; margin-bottom:8px;">¿Hablamos?</h2>
+        <p style="margin:0; max-width:40ch;">Busco mi próximo puesto como Desarrollador Java / Backend. Escríbeme o llama.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:jdelcerrodenava@gmail.com">jdelcerrodenava@gmail.com</a>
+        <a href="tel:+34674372040">+34 674 37 20 40</a>
+        <span style="color:var(--muted)">28100, Madrid</span>
+      </div>
+    </div>
+    <footer>© 2026 Javier del Cerro de Nava — construido a mano, sin plantillas.</footer>
+  </section>
+
+</main>
+
+<div class="statusbar">
+  <div class="status-left">
+    <span><span class="dot dot-off" id="status-dot"></span> <span id="status-label">API sin conectar</span></span>
+    <span id="status-section">~/inicio</span>
+  </div>
+  <div class="status-right">
+    <span class="status-clock" id="status-clock"></span>
+  </div>
+</div>
+
+<script>
+  function tickClock(){
+    document.getElementById('status-clock').textContent =
+      new Date().toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  }
+  tickClock(); setInterval(tickClock, 1000);
+
+  const sections = document.querySelectorAll('main section[id]');
+  const sectionLabel = document.getElementById('status-section');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        sectionLabel.textContent = '~/' + entry.target.id;
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, {rootMargin:'-40% 0px -50% 0px'});
+  sections.forEach(s => spy.observe(s));
+
+  const terminalPairs = [
+    { cmd:'curl -X POST $API/api/auth/demo-token',
+      res:'{\n  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aXNpdGFudGUt...",\n  "tokenType": "Bearer",\n  "expiresInSeconds": "900"\n}' },
+    { cmd:'curl $API/api/banking/accounts',
+      res:'[\n  { "accountId": "CTA-3F2A1B", "holderId": "12345678Z",\n    "accountType": "CHECKING", "status": "ACTIVE" }\n]' },
+    { cmd:'curl -X DELETE $API/api/banking/accounts/CTA-3F2A1B',
+      res:'{\n  "accountId": "CTA-3F2A1B", "holderId": "12345678Z",\n  "accountType": "CHECKING", "status": "ACTIVE"\n}' }
+  ];
+  const cmdEl = document.getElementById('term-cmd');
+  const resEl = document.getElementById('term-res');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function typeText(el, text, done){
+    el.textContent = ''; let i = 0;
+    (function step(){
+      if(i <= text.length){ el.textContent = text.slice(0,i); i++; setTimeout(step, 16); }
+      else { done(); }
+    })();
+  }
+  function runTerminal(){
+    let idx = 0;
+    (function next(){
+      const pair = terminalPairs[idx];
+      const cmdText = pair.cmd.replace('$API','https://api.primeofstudio.com');
+      resEl.textContent = '';
+      typeText(cmdEl, cmdText, ()=>{
+        setTimeout(()=>{
+          typeText(resEl, pair.res, ()=>{
+            setTimeout(()=>{ idx = (idx+1) % terminalPairs.length; setTimeout(next, 300); }, 2400);
+          });
+        }, 250);
+      });
+    })();
+  }
+  if(reducedMotion){
+    cmdEl.textContent = terminalPairs[0].cmd.replace('$API','https://api.primeofstudio.com');
+    resEl.textContent = terminalPairs[0].res;
+  } else {
+    runTerminal();
+  }
+
+  document.querySelectorAll('.lab-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=> switchTab(tab.dataset.tab));
+  });
+  function switchTab(name){
+    document.querySelectorAll('.lab-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    document.querySelectorAll('.lab-panel').forEach(p => p.hidden = (p.id !== 'panel-' + name));
+  }
+
+  const endpointData = {
+    'banking-list':    { method:'GET',    path:'/api/banking/accounts', auth:false, body:null, raw:false },
+    'banking-get':     { method:'GET',    path:'/api/banking/accounts/{accountId}', auth:false, body:null, raw:false, pathParam:'accountId' },
+    'banking-create':  { method:'POST',   path:'/api/banking/accounts', auth:true,
+                          body: JSON.stringify({holderId:'12345678Z', accountType:'CHECKING'}, null, 2), raw:false },
+    'banking-update':  { method:'PUT',    path:'/api/banking/accounts/{accountId}', auth:true,
+                          body: JSON.stringify({holderId:'12345678Z', accountType:'SAVINGS', status:'ACTIVE'}, null, 2),
+                          raw:false, pathParam:'accountId' },
+    'banking-delete':  { method:'DELETE', path:'/api/banking/accounts/{accountId}', auth:true, body:null, raw:false, pathParam:'accountId' },
+    'banking-payment': { method:'POST',   path:'/api/banking/payments', auth:true,
+                          body: JSON.stringify({accountId:'CTA-000000', amount:150.0, currency:'USD'}, null, 2), raw:false },
+    'banking-contract':{ method:'GET',    path:'/api/banking/contract', auth:false, body:null, raw:true },
+  };
+
+  let currentToken = null;
+
+  function updateEndpointUI(){
+    const ep = endpointData[document.getElementById('endpoint-select').value];
+    const methodBadge = document.getElementById('method-badge');
+    methodBadge.textContent = ep.method;
+    methodBadge.className = 'method-badge method-' + ep.method.toLowerCase();
+    document.getElementById('path-label').textContent = ep.path;
+    const bodyField = document.getElementById('request-body');
+    if(ep.body !== null){ bodyField.value = ep.body; bodyField.hidden = false; }
+    else { bodyField.value = ''; bodyField.hidden = true; }
+    const pathParamField = document.getElementById('path-param-field');
+    if(ep.pathParam){
+      document.getElementById('path-param-label').textContent = ep.pathParam;
+      pathParamField.hidden = false;
+    } else {
+      pathParamField.hidden = true;
+      document.getElementById('path-param-value').value = '';
+    }
+    document.getElementById('auth-badge').hidden = !ep.auth;
+    document.getElementById('response-panel').innerHTML = '';
+  }
+  updateEndpointUI();
+
+  function base64UrlDecode(str){
+    str = str.replace(/-/g,'+').replace(/_/g,'/');
+    while(str.length % 4) str += '=';
+    return decodeURIComponent(atob(str).split('').map(c => '%' + c.charCodeAt(0).toString(16).padStart(2,'0')).join(''));
+  }
+  function renderJwt(token){
+    const parts = token.split('.');
+    try{
+      document.getElementById('jwt-header').textContent = JSON.stringify(JSON.parse(base64UrlDecode(parts[0])), null, 2);
+      document.getElementById('jwt-payload').textContent = JSON.stringify(JSON.parse(base64UrlDecode(parts[1])), null, 2);
+      document.getElementById('jwt-panel').hidden = false;
+    }catch(e){}
+  }
+
+  function setApiStatus(connected, ms){
+    const dot = document.getElementById('status-dot');
+    dot.classList.toggle('dot-live', connected);
+    dot.classList.toggle('dot-off', !connected);
+    document.getElementById('status-label').textContent = connected
+      ? ('API conectada' + (ms !== undefined ? ' · ' + ms + ' ms' : ''))
+      : 'API sin conectar';
+  }
+
+  async function getToken(){
+    const base = document.getElementById('backend-url').value.trim().replace(/\/$/,'');
+    const btn = document.getElementById('btn-token');
+    const original = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Pidiendo token…';
+    const t0 = performance.now();
+    try{
+      const res = await fetch(base + '/api/auth/demo-token', {method:'POST'});
+      const ms = Math.round(performance.now() - t0);
+      setApiStatus(res.ok, ms);
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      currentToken = data.token;
+      document.getElementById('token-status').textContent = 'Token obtenido · expira en ' + data.expiresInSeconds + 's';
+      renderJwt(currentToken);
+    }catch(err){
+      setApiStatus(false);
+      document.getElementById('token-status').textContent = 'Error al pedir el token: ' + err.message;
+    }finally{
+      btn.disabled = false; btn.textContent = original;
+    }
+  }
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  async function sendRequest(){
+    const base = document.getElementById('backend-url').value.trim().replace(/\/$/,'');
+    const id = document.getElementById('endpoint-select').value;
+    const ep = endpointData[id];
+    const out = document.getElementById('response-panel');
+    const btn = document.getElementById('btn-send');
+
+    if(ep.auth && !currentToken){
+      out.innerHTML = '<p class="console-error">Este endpoint requiere token. Pulsa "Obtener token" primero.</p>';
+      return;
+    }
+
+    let resolvedPath = ep.path;
+    if(ep.pathParam){
+      const value = document.getElementById('path-param-value').value.trim();
+      if(!value){
+        out.innerHTML = '<p class="console-error">Rellena "' + ep.pathParam + '" antes de enviar (lo devuelve "Crear cuenta").</p>';
+        return;
+      }
+      resolvedPath = resolvedPath.replace('{' + ep.pathParam + '}', encodeURIComponent(value));
+    }
+
+    const headers = {};
+    if(ep.auth) headers['Authorization'] = 'Bearer ' + currentToken;
+    if(ep.body !== null) headers['Content-Type'] = 'application/json';
+
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    const t0 = performance.now();
+    try{
+      const res = await fetch(base + resolvedPath, {
+        method: ep.method,
+        headers,
+        body: ep.body !== null ? document.getElementById('request-body').value : undefined
+      });
+      const ms = Math.round(performance.now() - t0);
+      setApiStatus(res.ok, ms);
+      const text = ep.raw ? await res.text() : JSON.stringify(await res.json(), null, 2);
+      out.innerHTML =
+        '<div class="console-meta">' +
+          '<span class="status-pill ' + (res.ok ? 'ok' : 'err') + '">' + res.status + ' ' + res.statusText + '</span>' +
+          '<span class="mono-small">' + ms + ' ms</span>' +
+        '</div>' +
+        '<pre class="response-body">' + escapeHtml(text) + '</pre>';
+    }catch(err){
+      setApiStatus(false);
+      out.innerHTML = '<p class="console-error">No se pudo conectar con ' + base + '. Comprueba que el backend esté corriendo, la URL, y CORS.<br><span class="mono-small">' + err.message + '</span></p>';
+    }finally{
+      btn.disabled = false; btn.textContent = 'Enviar petición';
+    }
+  }
+
+  window.addEventListener('load', ()=>{
+    const base = document.getElementById('backend-url').value.trim().replace(/\/$/,'');
+    const t0 = performance.now();
+    fetch(base + '/api/banking/accounts').then(res=>{
+      setApiStatus(res.ok, Math.round(performance.now() - t0));
+    }).catch(()=> setApiStatus(false));
+  });
+</script>
+</body>
+</html>

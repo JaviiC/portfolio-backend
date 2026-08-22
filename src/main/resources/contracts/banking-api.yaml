@@ -1,0 +1,99 @@
+openapi: 3.0.3
+info:
+  title: Banking API
+  version: 1.0.0
+  description: >
+    Contrato de referencia para una API bancaria contract-first, en el mismo
+    estilo con el que se estructuraron los microservicios reales migrados
+    para Banco Santander USA. CRUD completo sobre el recurso "cuenta".
+paths:
+  /api/banking/accounts:
+    get:
+      operationId: listAccounts
+      summary: Lista las cuentas existentes
+      responses:
+        '200': { description: OK }
+    post:
+      operationId: openAccount
+      summary: Crea una cuenta nueva
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OpenAccountRequest' }
+      responses:
+        '200': { description: Cuenta creada }
+  /api/banking/accounts/{accountId}:
+    get:
+      operationId: getAccount
+      summary: Consulta una cuenta por id
+      parameters:
+        - { name: accountId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: OK }
+    put:
+      operationId: updateAccount
+      summary: Modifica una cuenta existente
+      parameters:
+        - { name: accountId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UpdateAccountRequest' }
+      responses:
+        '200': { description: Cuenta modificada }
+    delete:
+      operationId: deleteAccount
+      summary: Elimina una cuenta existente
+      parameters:
+        - { name: accountId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: Cuenta eliminada }
+  /api/banking/payments:
+    post:
+      operationId: createPayment
+      summary: Crea un pago desde una cuenta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentRequest' }
+      responses:
+        '200': { description: Pago aceptado }
+components:
+  schemas:
+    OpenAccountRequest:
+      type: object
+      required: [holderId, accountType]
+      properties:
+        holderId: { type: string, example: "12345678Z" }
+        accountType: { type: string, enum: [CHECKING, SAVINGS] }
+    UpdateAccountRequest:
+      type: object
+      required: [holderId, accountType, status]
+      properties:
+        holderId: { type: string }
+        accountType: { type: string, enum: [CHECKING, SAVINGS] }
+        status: { type: string, enum: [ACTIVE, BLOCKED] }
+    AccountResponse:
+      type: object
+      properties:
+        accountId: { type: string }
+        holderId: { type: string }
+        accountType: { type: string }
+        status: { type: string, enum: [ACTIVE, BLOCKED] }
+        openedAt: { type: string, format: date-time }
+    PaymentRequest:
+      type: object
+      required: [accountId, amount, currency]
+      properties:
+        accountId: { type: string }
+        amount: { type: number }
+        currency: { type: string, example: "USD" }
+    PaymentResponse:
+      type: object
+      properties:
+        paymentId: { type: string }
+        status: { type: string, enum: [ACCEPTED, REJECTED] }
+        routedVia: { type: string, example: "java-native" }

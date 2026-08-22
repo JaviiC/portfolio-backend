@@ -1,0 +1,32 @@
+<!--
+  Ejemplo ILUSTRATIVO y genérico de cómo podía verse un flujo de Mule para
+  validar un pago antes de migrarlo. No reproduce ningún flujo real ni
+  confidencial: es solo la estructura típica de un flujo Mule 3/4
+  (listener + transformación DataWeave + choice de validación).
+-->
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:http="http://www.mulesoft.org/schema/mule/http">
+    <flow name="validatePaymentFlow">
+        <http:listener path="/payments/validate" config-ref="HTTP_Listener_config"/>
+        <dw:transform-message>
+            <dw:set-payload><![CDATA[
+                %dw 2.0
+                output application/json
+                ---
+                {
+                    accountId: payload.accountId,
+                    amount: payload.amount,
+                    currency: payload.currency default "USD"
+                }
+            ]]></dw:set-payload>
+        </dw:transform-message>
+        <choice>
+            <when expression="#[payload.amount <= 0]">
+                <set-payload value="#[{status: 'REJECTED', reason: 'importe invalido'}]"/>
+            </when>
+            <otherwise>
+                <set-payload value="#[{status: 'ACCEPTED'}]"/>
+            </otherwise>
+        </choice>
+    </flow>
+</mule>
