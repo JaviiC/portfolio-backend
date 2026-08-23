@@ -1,94 +1,103 @@
 package com.javiercerro.portfolio.patterns.builder;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Vehicle {
 
-    private VehicleType type;
-    private Motor motor;
-    private Transmission transmission;
-    private String colorInterior;
-    private String colorExterior;
-    private Set<Package> packages;
-    private Set<Feature> features;
+    private final VehicleType type;
+    private final Motor motor;
+    private final Transmission transmission;
+    private final String interiorColor;
+    private final String exteriorColor;
+    private final Package apackage;
+    private final Set<Feature> features;
 
-    public Vehicle(){
-        this("Negro", "Blanco y Azul");
-        packages = new HashSet<>();
-        features = new HashSet<>();
+    private Vehicle(Builder builder){
+        this.type = builder.type;
+        this.motor = builder.motor;
+        this.transmission = builder.transmission;
+        this.interiorColor = builder.interiorColor;
+        this.exteriorColor = builder.exteriorColor;
+        this.apackage = builder.apackage;
+        this.features = Collections.unmodifiableSet(new HashSet<>(builder.features));
+    }
+    public static Builder builder() {
+        return new Builder();
     }
 
-    public Vehicle(String colorInterior, String colorExterior){
-        this.colorInterior = colorInterior;
-        this.colorExterior = colorExterior;
-    }
+    public static class Builder {
 
-    public VehicleType getType() {
-        return type;
-    }
+        private VehicleType type;
+        private Motor motor;
+        private Transmission transmission;
+        private String interiorColor;
+        private String exteriorColor;
+        private Package apackage;
+        private Set<Feature> features = new HashSet<>();
 
-    public void setType(VehicleType type) {
-        this.type = type;
-    }
+        public Builder reset(){
+            this.type = null;
+            this.motor = null;
+            this.transmission = null;
+            this.interiorColor = null;
+            this.exteriorColor = null;
+            this.apackage = null;
+            this.features = new HashSet<>();
+            return this;
+        }
 
-    public Motor getMotor() {
-        return motor;
-    }
+        public Builder type(VehicleType vehicleType) {
+            this.type = vehicleType;
+            return this;
+        }
 
-    public void setMotor(Motor motor) {
-        this.motor = motor;
-    }
+        public Builder motor(Motor motor){
+            this.motor = motor;
+            return this;
+        }
 
-    public Transmission getTransmission() {
-        return transmission;
-    }
+        public Builder transmission(Transmission transmission) {
+            this.transmission = transmission;
+            return this;
+        }
 
-    public void setTransmission(Transmission transmission) {
-        this.transmission = transmission;
-    }
+        public Builder interiorColor(String interiorColor) {
+            this.interiorColor = interiorColor;
+            return this;
+        }
 
-    public String getColorInterior() {
-        return colorInterior;
-    }
+        public Builder exteriorColor(String exteriorColor){
+            this.exteriorColor = exteriorColor;
+            return this;
+        }
 
-    public void setColorInterior(String colorInterior) {
-        this.colorInterior = colorInterior;
-    }
+        public Builder apackage(Package apackage) {
+            this.apackage = apackage;
+            return this;
+        }
 
-    public String getColorExterior() {
-        return colorExterior;
-    }
+        public Builder addFeature(Feature feature) {
+            this.features.add(feature);
+            return this;
+        }
 
-    public void setColorExterior(String colorExterior) {
-        this.colorExterior = colorExterior;
-    }
+        public Vehicle build(){
+            return new Vehicle(this);
+        }
 
-    public Set<Package> getPackages() {
-        return packages;
-    }
-
-    public Set<Feature> getFeatures() {
-        return features;
-    }
-
-    public void addPackage(Package aPackage){
-        this.packages.add(aPackage);
-    }
-
-    public void aniadirCaracteristica(Feature feature){
-        this.features.add(feature);
     }
 
     @Override
     public String toString() {
-        return "Vehiculo{" +
-                "tipo=" + type +
+        return "Vehicle{" +
+                "type=" + type +
                 ", motor=" + motor +
-                ", transmision=" + transmission +
-                ", colorInterior='" + colorInterior + '\'' +
-                ", colorExterior='" + colorExterior + '\'' +
-                ", packages=" + packages +
+                ", transmission=" + transmission +
+                ", interiorColor='" + interiorColor + '\'' +
+                ", exteriorColor='" + exteriorColor + '\'' +
+                ", packages=" + apackage +
                 ", features=" + features +
                 '}';
     }
