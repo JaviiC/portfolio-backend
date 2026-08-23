@@ -10,49 +10,49 @@ public class VehicleBuilder implements Builder{
     }
 
     @Override
-    public void setTipo(VehicleType tipo) {
-        if(vehicle.getTipo() == null)
-            vehicle.setTipo(tipo);
+    public void setType(VehicleType tipo) {
+        if(vehicle.getType() == null)
+            vehicle.setType(tipo);
     }
 
     @Override
-    public void fabricarMotor(Motor motor) {
+    public void makeMotor(Motor motor) {
         vehicle.setMotor(motor);
     }
 
     @Override
-    public void gestionarTransmision(Transmission transmission) {
-        if(vehicle.getTransmision() == null)
-            vehicle.setTransmision(transmission);
+    public void manageTransmission(Transmission transmission) {
+        if(vehicle.getTransmission() == null)
+            vehicle.setTransmission(transmission);
     }
 
     @Override
-    public void pintarInterior(String colorI) {
+    public void paintInterior(String colorI) {
         vehicle.setColorInterior(colorI);
     }
 
     @Override
-    public void pintarExterior(String colorE) {
+    public void paintExterior(String colorE) {
         vehicle.setColorExterior(colorE);
     }
 
     @Override
-    public void aniadirPaquete(Packet packet) {
-        vehicle.aniadirPaquete(packet);
+    public void addPackage(Package aPackage) {
+        vehicle.addPackage(aPackage);
     }
 
     @Override
-    public void aniadirCaracteristica(Feature feature) {
+    public void addFeature(Feature feature) {
         vehicle.aniadirCaracteristica(feature);
     }
 
     @Override
-    public Vehicle fabricarVehiculo() {
-        if(vehicle.getTipo() != null
+    public Vehicle produceVehicle() {
+        if(vehicle.getType() != null
                 && vehicle.getMotor() != null
-                && vehicle.getTransmision() != null
-                && !vehicle.getPaquetes().isEmpty()
-                && !vehicle.getCaracteristicas().isEmpty()){
+                && vehicle.getTransmission() != null
+                && !vehicle.getPackages().isEmpty()
+                && !vehicle.getFeatures().isEmpty()){
             return vehicle;
         }
         throw new RuntimeException("Error al fabricar, vehículo incompleto -> " + vehicle.toString());

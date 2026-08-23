@@ -5,17 +5,17 @@ import java.util.Set;
 
 public class Vehicle {
 
-    private VehicleType tipo;
+    private VehicleType type;
     private Motor motor;
     private Transmission transmission;
     private String colorInterior;
     private String colorExterior;
-    private Set<Packet> packets;
+    private Set<Package> packages;
     private Set<Feature> features;
 
     public Vehicle(){
         this("Negro", "Blanco y Azul");
-        packets = new HashSet<>();
+        packages = new HashSet<>();
         features = new HashSet<>();
     }
 
@@ -24,12 +24,12 @@ public class Vehicle {
         this.colorExterior = colorExterior;
     }
 
-    public VehicleType getTipo() {
-        return tipo;
+    public VehicleType getType() {
+        return type;
     }
 
-    public void setTipo(VehicleType tipo) {
-        this.tipo = tipo;
+    public void setType(VehicleType type) {
+        this.type = type;
     }
 
     public Motor getMotor() {
@@ -40,11 +40,11 @@ public class Vehicle {
         this.motor = motor;
     }
 
-    public Transmission getTransmision() {
+    public Transmission getTransmission() {
         return transmission;
     }
 
-    public void setTransmision(Transmission transmission) {
+    public void setTransmission(Transmission transmission) {
         this.transmission = transmission;
     }
 
@@ -64,16 +64,16 @@ public class Vehicle {
         this.colorExterior = colorExterior;
     }
 
-    public Set<Packet> getPaquetes() {
-        return packets;
+    public Set<Package> getPackages() {
+        return packages;
     }
 
-    public Set<Feature> getCaracteristicas() {
+    public Set<Feature> getFeatures() {
         return features;
     }
 
-    public void aniadirPaquete(Packet packet){
-        this.packets.add(packet);
+    public void addPackage(Package aPackage){
+        this.packages.add(aPackage);
     }
 
     public void aniadirCaracteristica(Feature feature){
@@ -83,13 +83,13 @@ public class Vehicle {
     @Override
     public String toString() {
         return "Vehiculo{" +
-                "tipo=" + tipo +
+                "tipo=" + type +
                 ", motor=" + motor +
                 ", transmision=" + transmission +
                 ", colorInterior='" + colorInterior + '\'' +
                 ", colorExterior='" + colorExterior + '\'' +
-                ", paquetes=" + packets +
-                ", caracteristicas=" + features +
+                ", packages=" + packages +
+                ", features=" + features +
                 '}';
     }
 }

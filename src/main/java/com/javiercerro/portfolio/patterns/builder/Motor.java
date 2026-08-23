@@ -10,4 +10,8 @@ public class Motor {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }
