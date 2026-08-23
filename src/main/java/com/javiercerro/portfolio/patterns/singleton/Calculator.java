@@ -17,11 +17,11 @@ public final class Calculator {
         return instance;
     }
 
-    protected double suma(int n){
+    protected double sum(int n){
         return total += n;
     }
 
-    protected double resta(int n){
+    protected double rest(int n){
         return total -= n;
     }
 
